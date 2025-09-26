@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">FirstProject</string>
+    
+    <string name="title_activity_first">MainActivity</string>
+    <string name="title_activity_second">SecondActivity</string>
+    <string name="title_activity_third">ThirdActivity</string>
+    
+    <string name="title_first_screen">Экран 1</string>
+    <string name="title_second_screen">Экран 2</string>
+    <string name="title_third_screen">Экран 3</string>
+
+    <string name="btn_open_screen1">Открыть экран 1</string>
+    <string name="btn_open_screen2">Открыть экран 2</string>
+    <string name="btn_open_screen3">Открыть экран 3</string>
+
+    <string name="label_text">Введите текст</string>
+
 </resources>
