@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">FirstProject</string>
+
+    <!-- Login Page-->
+    <string name="error_email_is_blank">Вы оставили поле электронного адереса пустым</string>
+    <string name="error_password_is_blank">Вы оставили поле пароля пустым</string>
+    <string name="error_email_not_valid">Неверный формат электронного адреса</string>
+    <string name="error_password_length">Пароль должен содеражть не менее 8 символов</string>
+
+    <string name="sign_up_title">Вход</string>
+    <string name="email">Электронная почта</string>
+    <string name="password">Пароль</string>
+    <string name="show_password">Показать пароль</string>
+    <string name="hide_password">Спрятать пароль</string>
+
+    <!-- Notes Page-->
+    <string name="email_title">Ваш e-mail:</string>
+    <string name="empty_notes_title">Пока нет заметок</string>
+    <string name="text_on_btn">Добавить заметку</string>
+
+    <!-- AddNote Page-->
+    <string name="error_message">Заголовок не может быть пустым</string>
+    <string name="new_note">Новая заметка</string>
+    <string name="note_title">Заголовок:</string>
+    <string name="note_text">Текст заметки:</string>
+    <string name="button_save_text">Сохранить</string>
+
 </resources>
