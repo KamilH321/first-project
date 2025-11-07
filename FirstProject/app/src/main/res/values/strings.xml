@@ -1,3 +1,45 @@
 <resources>
     <string name="app_name">FirstProject</string>
+
+    <!-- Заголовки вкладок -->
+    <string name="tab_settings_title">Настройки</string>
+    <string name="tab_edit_title">Редактировать</string>
+    <string name="tab_messages_title">Сообщения</string>
+
+    <!-- Экран настроек уведомления -->
+    <string name="notification_title">Заголовок уведомления</string>
+    <string name="notification_content">Текст уведомления</string>
+    <string name="share_text">Раскрывать длинный текст</string>
+    <string name="add_text_to_enable">Добавьте текст для включения</string>
+    <string name="notification_priority">Приоритет уведомления</string>
+    <string name="open_app_on_click">Открывать приложение при клике</string>
+    <string name="add_reply_action">Добавить действие ответа</string>
+    <string name="create_notification">Создать уведомление</string>
+    <string name="empty_title_warning">Заголовок не может быть пустым</string>
+    <string name="notification_created">Уведомление создано</string>
+
+    <!-- Приоритеты уведомлений -->
+    <string name="priority_min">Минимальный</string>
+    <string name="priority_low">Низкий</string>
+    <string name="priority_default">Средний</string>
+    <string name="priority_high">Высокий</string>
+
+    <!-- Экран редактирования уведомления -->
+    <string name="notification_id">ID уведомления</string>
+    <string name="new_text">Новый текст</string>
+    <string name="update_button_text">Обновить</string>
+    <string name="clear_all_button">Очистить все</string>
+    <string name="input_error_id_text">Введите корректный ID</string>
+    <string name="message_is_update">Сообщение обновлено</string>
+    <string name="notification_not_found">Уведомление не найдено</string>
+    <string name="all_notifications_cleared">Все уведомления очищены</string>
+
+    <!-- Экран сообщений -->
+    <string name="new_message">Новое сообщение</string>
+    <string name="add_message">Добавить сообщение</string>
+    <string name="time_format">dd.MM.yyyy HH:mm:ss</string>
+
+    <!-- Для Reply Action -->
+    <string name="reply">Ответить</string>
+    <string name="remote_input_label">Введите ответ</string>
 </resources>
