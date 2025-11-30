@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">FirstProject</string>
+    
+    <!-- Строки для исключений -->
+    <string name="toast_exception_pattern">Job %1$d: toast exception (delay %2$dms)</string>
+    <string name="snackbar_exception_pattern">Job %1$d: snackbar exception (delay %2$dms)</string>
+    <string name="reset_exception_pattern">Job %1$d: reset exception (delay %2$dms)</string>
+
+    <string name="snackbar_exception_text">Snackbar exception occurred</string>
+    <string name="toast_exception_text">Toast exception</string>
+    <string name="reset_exception_text">Reset triggered</string>
+    <string name="unknown_exception_text">Unknown error</string>
+    <!-- Строки для исключений -->
+
+    <!-- Строки для главного экрана -->
+    <string name="title">Количество корутин: %1$d</string>
+    <string name="select_dispatcher_btn">Dispathcer: %1$s</string>
+    <string name="start_mode">Режим выполнения:</string>
+    <string name="sequential_mode">Последовательно:</string>
+    <string name="parallel_mode">Параллельно:</string>
+    <string name="delay_start">Отложенный старт</string>
+    <string name="launch_coroutines_btn">Запустить корутины</string>
+    <string name="cancel_coroutines_btn">Отменить корутины</string>
+    <string name="loading_text">Выполнение %1$d корутин на %2$s...</string>
+    <string name="sequential_mode_text">последовательно</string>
+    <string name="parallel_mode_text">параллельно</string>
+    <string name="mode_text">Режим:</string>
+    <string name="delay_start_text">С отложенным стартом (2 сек)</string>
+    <string name="cancelled_count">Отменено корутин: %1$d</string>
+    <!-- Строки для главного экрана -->
+
 </resources>
