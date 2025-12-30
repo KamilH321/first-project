@@ -1,3 +1,60 @@
 <resources>
     <string name="app_name">FirstProject</string>
+    
+    <!-- Login Screen & Register Screen -->
+    <string name="login_title">Авторизация</string>
+    <string name="sign_in">Войти</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="register_title">Регистрация</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="name">Имя</string>
+    <string name="create_account">Создать новый аккаунт</string>
+
+    <string name="error_name_is_blank">Поле "Имя" не должно быть пустым!</string>
+    <string name="error_email_is_blank">Поле "Email" не должно быть пустым!</string>
+    <string name="error_password_is_blank">Поле "Пароль" не должно быть пустым!</string>
+    <string name="error_email_not_valid">Неверный email</string>
+    <string name="error_password_length">Пароль должен содеражть не менее 8 символов</string>
+    <string name="error_invalid_credentials">Неверные учетные данные</string>
+    <!-- Login Screen & Register Screen -->
+
+    <!-- Home Screen -->
+    <string name="screen_title">Список фильмов</string>
+    <string name="add_btn_label">+</string>
+    <string name="sort_btn_label">Сортировка</string>
+    <string name="sort_by_title">По названию</string>
+    <string name="sort_by_year">По году</string>
+    <string name="sort_by_country">По cтране</string>
+    <string name="sort_by_genre">По жанру</string>
+
+    <string name="year_text">%1$s • %2$s • %3$s</string>
+    <string name="collapse">Свернуть</string>
+    <string name="expand">Подробнее</string>
+    <!-- Home Screen -->
+
+    <!-- Add Film Screen -->
+    <string name="add_film_screen_title">Добавить фильм</string>
+    <string name="title_label">Название</string>
+    <string name="description_label">Описание</string>
+    <string name="year_label">Год выпуска</string>
+    <string name="country_label">Страна</string>
+    <string name="genre_label">Жанр</string>
+
+    <string name="select_img_btn">Выбрать обложку</string>
+    <string name="error_blank">Все поля должны быть заполнены!</string>
+    <string name="year_type_is_not_valid">Некорректный год выпуска</string>
+    <string name="year_is_not_valid">Год выпуска слишком маленький</string>
+    <string name="not_selected_img">Выберите обложку фильма</string>
+    <string name="save_btn_title">Сохранить</string>
+    <string name="film_is_exists_error">Фильм с таким названием уже существует</string>
+    <!-- Add Film Screen -->
+
+    <!-- Profile Screen -->
+    <string name="profile_label">Профиль</string>
+    <string name="email_label">Email</string>
+    <string name="list_of_films">Список добавленных вами фильмов:</string>
+    <string name="empty_list">Вы пока не добавили ни одного фильма</string>
+    <string name="logout_btn_title">Выйти</string>
+    <!-- Profile Screen -->
 </resources>
