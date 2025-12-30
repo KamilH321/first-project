@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp.plugin)
 }
 
 android {
@@ -49,6 +51,24 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    implementation(libs.compose.navigation)
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.kotlinx.coroutines)
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network)
+
+    implementation(libs.room)
+
+    implementation(libs.androidx.animation.core.lint)
+    implementation(libs.androidx.runtime)
+    ksp(libs.room.compiler)
+
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation(libs.bcrypt)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
