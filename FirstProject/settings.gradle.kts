@@ -21,3 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "FirstProject"
 include(":app")
+include(":core")
+include(":core:data")
+include(":core:domain")
+include(":core:di")
+include(":core:network")

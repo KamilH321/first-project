@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp.plugin)
-    alias(libs.plugins.hilt)
 }
 
 android {
@@ -43,6 +42,11 @@ android {
 
 dependencies {
 
+    implementation(project(":core:data"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:di"))
+    implementation(project(":core:network"))
+
     implementation(libs.androidx.core.ktx)
 
     // Compose
@@ -63,15 +67,6 @@ dependencies {
 
     // Coroutines
     implementation(libs.kotlinx.coroutines)
-
-    // Room
-    implementation(libs.room)
-    ksp(libs.room.compiler)
-
-    // Hilt
-    implementation(libs.hilt)
-    ksp(libs.hilt.compiler)  // Используем ksp для Hilt
-    implementation(libs.javax.inject)
 
     // Retrofit
     implementation(libs.retrofit)
