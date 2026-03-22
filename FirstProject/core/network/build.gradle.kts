@@ -34,6 +34,9 @@ android {
 
 dependencies {
 
+    implementation(project(":core:build-config:api"))
+    implementation(project(":core:build-config:impl"))
+
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)

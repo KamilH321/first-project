@@ -8,7 +8,6 @@ interface OMDbApi {
 
     @GET("/")
     suspend fun getDataByQuery(
-        @Query(value = "apikey") apiKey: String,
         @Query(value = "s") query: String
     ) : OMDbResponse
 }

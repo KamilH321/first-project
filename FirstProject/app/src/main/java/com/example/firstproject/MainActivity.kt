@@ -45,12 +45,8 @@ class MainActivity : ComponentActivity() {
 
             FirstProjectTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
                     Column(
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(innerPadding)
                     ) {
                         var films by remember { mutableStateOf<List<FilmModel>>(emptyList()) }
 
@@ -99,21 +95,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FirstProjectTheme {
-        Greeting("Android")
     }
 }

@@ -8,17 +8,11 @@ import ru.itis.network.OMDbApi
 
 class FilmRepositoryImpl(
     private val omdbApi: OMDbApi,
-    private val filmModelMapper: FilmModelMapper,
-    private val buildConfigProvider: BuildConfigProvider
+    private val filmModelMapper: FilmModelMapper
 ): FilmRepository {
 
-    private val API_KEY = buildConfigProvider.getOMDbApiKey()
-
     override suspend fun searchByQuery(query: String): List<FilmModel> {
-        val response = omdbApi.getDataByQuery(
-            apiKey = API_KEY,
-            query = query
-        )
+        val response = omdbApi.getDataByQuery(query = query)
         return filmModelMapper.map(response)
     }
 }
