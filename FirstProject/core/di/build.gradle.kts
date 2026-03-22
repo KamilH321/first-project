@@ -39,6 +39,8 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:network"))
     implementation(project(":core:data"))
+    implementation(project(":core:build-config:api"))
+    implementation(project(":core:build-config:impl"))
 
     // Retrofit
     implementation(libs.retrofit)

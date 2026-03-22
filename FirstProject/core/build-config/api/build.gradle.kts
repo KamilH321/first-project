@@ -1,11 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp.plugin)
 }
 
 android {
-    namespace = "ru.itis.data"
+    namespace = "ru.itis.buildconfig.api"
     compileSdk = 36
 
     defaultConfig {
@@ -34,23 +33,9 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":core:domain"))
-    implementation(project(":core:network"))
-    implementation(project(":core:build-config:api"))
-    implementation(project(":core:build-config:impl"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-
-    // Coroutines
-    implementation(libs.kotlinx.coroutines)
-
-    // Room
-    implementation(libs.room)
-    ksp(libs.room.compiler)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -46,6 +46,8 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:di"))
     implementation(project(":core:network"))
+    implementation(project(":core:build-config:api"))
+    implementation(project(":core:build-config:impl"))
 
     implementation(libs.androidx.core.ktx)
 

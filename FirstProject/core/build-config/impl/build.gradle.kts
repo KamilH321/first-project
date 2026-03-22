@@ -1,11 +1,19 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp.plugin)
 }
 
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+val omdbApiKey = localProperties.getProperty("OMDB_API_KEY") ?: "\"\""
+
 android {
-    namespace = "ru.itis.data"
+    namespace = "ru.itis.buildconfig.impl"
     compileSdk = 36
 
     defaultConfig {
@@ -13,6 +21,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "OMDB_API_BASE_URL", "\"https://www.omdbapi.com/\"")
+        buildConfigField("String", "OMDB_API_KEY", "\"$omdbApiKey\"")
     }
 
     buildTypes {
@@ -31,26 +42,20 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
 }
 
 dependencies {
 
-    implementation(project(":core:domain"))
-    implementation(project(":core:network"))
     implementation(project(":core:build-config:api"))
-    implementation(project(":core:build-config:impl"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-
-    // Coroutines
-    implementation(libs.kotlinx.coroutines)
-
-    // Room
-    implementation(libs.room)
-    ksp(libs.room.compiler)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
