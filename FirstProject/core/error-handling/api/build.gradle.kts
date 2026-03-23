@@ -1,12 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp.plugin)
-    alias(libs.plugins.hilt)
 }
 
 android {
-    namespace = "ru.itis.di"
+    namespace = "ru.itis.api"
     compileSdk = 36
 
     defaultConfig {
@@ -35,24 +33,6 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":core:domain"))
-    implementation(project(":core:network"))
-    implementation(project(":core:data"))
-    implementation(project(":core:build-config:api"))
-    implementation(project(":core:build-config:impl"))
-    implementation(project(":core:error-handling:api"))
-    implementation(project(":core:error-handling:impl"))
-
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-
-    // Hilt
-    implementation(libs.hilt)
-    ksp(libs.hilt.compiler)  // Используем ksp для Hilt
-    implementation(libs.javax.inject)
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
