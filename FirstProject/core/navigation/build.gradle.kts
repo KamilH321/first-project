@@ -1,12 +1,11 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "ru.itis.search"
+    namespace = "ru.itis.navigation"
     compileSdk = 36
 
     defaultConfig {
@@ -36,26 +35,9 @@ android {
 
 dependencies {
 
-    implementation(project(":core:domain"))
-    implementation(project(":core:error-handling:api"))
-    implementation(project(":core:utils"))
-    implementation(project(":core:di"))
-    implementation(project(":core:domain"))
-    implementation(project(":core:navigation"))
-    implementation(project(":core:error-handling:api"))
-
     // Navigation
+    implementation(libs.compose.navigation)
     implementation(libs.bundles.nav3.core)
-
-    // Compose
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

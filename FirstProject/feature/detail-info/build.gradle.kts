@@ -1,23 +1,19 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp.plugin)
     alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.example.firstproject"
+    namespace = "ru.itis.detail_info"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.firstproject"
         minSdk = 24
-        targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -36,24 +32,20 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
 
-    implementation(project(":core:data"))
     implementation(project(":core:domain"))
+    implementation(project(":core:error-handling:api"))
+    implementation(project(":core:utils"))
     implementation(project(":core:di"))
-    implementation(project(":core:network"))
+    implementation(project(":core:domain"))
     implementation(project(":core:navigation"))
-    implementation(project(":core:build-config:api"))
-    implementation(project(":core:build-config:impl"))
-    implementation(project(":feature:search"))
-    implementation(project(":feature:detail-info"))
+    implementation(project(":core:error-handling:api"))
 
-    implementation(libs.androidx.core.ktx)
+    // Navigation
+    implementation(libs.bundles.nav3.core)
 
     // Compose
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -65,26 +57,10 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    // Navigation
-    implementation(libs.compose.navigation)
-    implementation(libs.bundles.nav3.core)
-
-    // Serialization
-    implementation(libs.kotlinx.serialization.json)
-
-    // Coroutines
-    implementation(libs.kotlinx.coroutines)
-
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-
-
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 }

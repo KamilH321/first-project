@@ -5,30 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.Composable
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
+import ru.itis.navigation.CommonInfo
+import com.example.firstproject.navigation.NavigatorImpl
+import ru.itis.navigation.Search
 import com.example.firstproject.ui.theme.FirstProjectTheme
-import kotlinx.coroutines.launch
-import ru.itis.di.ServiceLocator
-import ru.itis.domain.model.FilmModel
-import ru.itis.domain.usecase.SearchFilmByQueryUseCase
+import ru.itis.detail_info.DetailInfoScreen
 import ru.itis.search.ui.SearchScreen
 import ru.itis.search.viewmodel.SearchViewModel
 
@@ -43,8 +27,35 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             FirstProjectTheme {
-                SearchScreen(viewModel)
+                AppNavGraph(
+                    viewModel,
+                    NavigatorImpl()
+                )
             }
         }
     }
+}
+
+
+@Composable
+fun AppNavGraph(
+    viewModel: SearchViewModel,
+    navigator: NavigatorImpl
+) {
+
+    NavDisplay(
+        backStack = navigator.getBackStack(),
+        onBack = { navigator.popEntry() },
+        entryProvider = entryProvider {
+            entry<Search> {
+                SearchScreen(
+                    viewModel,
+                    navigator)
+            }
+            entry<CommonInfo> {
+                DetailInfoScreen()
+            }
+        }
+
+    )
 }

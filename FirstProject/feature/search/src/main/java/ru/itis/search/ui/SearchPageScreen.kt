@@ -19,10 +19,14 @@ import ru.itis.search.viewmodel.SearchViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import ru.itis.navigation.CommonInfo
+import ru.itis.navigation.Navigator
+import ru.itis.navigation.Search
 
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel,
+    navigator: Navigator
 ) {
 
     var input by remember { mutableStateOf("") }
@@ -31,7 +35,8 @@ fun SearchScreen(
     SearchContent(
         viewModel = viewModel,
         input = input,
-        onInputValueChange = { input = it}
+        onInputValueChange = { input = it},
+        navigator = navigator
     )
 }
 
@@ -39,7 +44,8 @@ fun SearchScreen(
 private fun SearchContent(
     viewModel: SearchViewModel,
     input: String,
-    onInputValueChange: (String) -> Unit
+    onInputValueChange: (String) -> Unit,
+    navigator: Navigator
 ) {
 
     val dataList = viewModel.filmList.collectAsStateWithLifecycle()
@@ -99,6 +105,14 @@ private fun SearchContent(
                 )
 
                 Spacer(modifier = Modifier.padding(16.dp))
+
+                Button(
+                    onClick = {
+                        navigator.navigate(CommonInfo)
+                    }
+                ) {
+                    Text(text = "Full INFO")
+                }
             }
         }
     }

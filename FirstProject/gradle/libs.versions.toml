@@ -13,8 +13,10 @@ lifecycle-viewmodel-compose = "2.8.7"
 
 # Navigation
 navigation = "2.9.5"
+nav-core = "1.0.1"
+nav3-lifcyclevm = "2.11.0-alpha01"
 
-# Navigation
+# Serialization
 kotlin-serialization = "1.7.3"
 
 # Coroutines
@@ -58,6 +60,9 @@ coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 
 # Navigation
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+x-navigation3-runtime = {group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "nav-core"}
+x-navigation3-ui = { group = "androidx.navigation3", name = "navigation3-ui", version.ref = "nav-core" }
+x-navigation3-lifecyclevm = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-navigation3", version.ref = "nav3-lifcyclevm"}
 
 # Serialization
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization" }
@@ -80,11 +85,15 @@ retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
+[bundles]
+nav3-core = ["x-navigation3-runtime", "x-navigation3-ui", "x-navigation3-lifecyclevm"]
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
 
 # Hilt
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
