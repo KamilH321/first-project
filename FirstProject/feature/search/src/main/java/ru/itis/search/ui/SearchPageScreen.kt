@@ -108,7 +108,7 @@ private fun SearchContent(
 
                 Button(
                     onClick = {
-                        navigator.navigate(CommonInfo)
+                        navigator.navigateWithData(CommonInfo(), dataList.value[position].id)
                     }
                 ) {
                     Text(text = "Full INFO")

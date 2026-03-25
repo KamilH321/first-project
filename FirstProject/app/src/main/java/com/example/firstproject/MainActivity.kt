@@ -12,13 +12,15 @@ import ru.itis.navigation.CommonInfo
 import com.example.firstproject.navigation.NavigatorImpl
 import ru.itis.navigation.Search
 import com.example.firstproject.ui.theme.FirstProjectTheme
-import ru.itis.detail_info.DetailInfoScreen
+import ru.itis.detail_info.ui.DetailInfoScreen
+import ru.itis.detail_info.viewmodel.DetailInfoViewModel
 import ru.itis.search.ui.SearchScreen
 import ru.itis.search.viewmodel.SearchViewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: SearchViewModel by viewModels { SearchViewModel.Factory }
+    private val searchViewModel: SearchViewModel by viewModels { SearchViewModel.Factory }
+    private val detailInfoViewModel: DetailInfoViewModel by viewModels { DetailInfoViewModel.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +30,8 @@ class MainActivity : ComponentActivity() {
 
             FirstProjectTheme {
                 AppNavGraph(
-                    viewModel,
+                    searchViewModel,
+                    detailInfoViewModel,
                     NavigatorImpl()
                 )
             }
@@ -39,7 +42,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun AppNavGraph(
-    viewModel: SearchViewModel,
+    searchViewModel: SearchViewModel,
+    detailInfoViewModel: DetailInfoViewModel,
     navigator: NavigatorImpl
 ) {
 
@@ -49,11 +53,16 @@ fun AppNavGraph(
         entryProvider = entryProvider {
             entry<Search> {
                 SearchScreen(
-                    viewModel,
+                    searchViewModel,
                     navigator)
             }
-            entry<CommonInfo> {
-                DetailInfoScreen()
+            entry<CommonInfo> { backStackEntry ->
+                val commonInfo = backStackEntry as? CommonInfo
+                DetailInfoScreen(
+                    filmId = commonInfo?.data ?:"",
+                    viewModel = detailInfoViewModel,
+                    navigator = navigator
+                )
             }
         }
 

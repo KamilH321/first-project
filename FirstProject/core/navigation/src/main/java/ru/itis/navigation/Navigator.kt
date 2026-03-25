@@ -7,5 +7,7 @@ interface Navigator {
 
     fun navigate(route: NavKey)
 
+    fun navigateWithData(route: NavKey, data: String)
+
     fun popEntry()
 }
