@@ -8,7 +8,7 @@ import ru.itis.navigation.Search
 
 class NavigatorImpl: Navigator {
 
-    private val backstack = mutableStateListOf<Any>()
+    private val backstack =  mutableStateListOf<Any>()
 
     init {
         backstack.add(Search)
@@ -16,17 +16,6 @@ class NavigatorImpl: Navigator {
 
     override fun navigate(route: NavKey) {
         backstack.add(route)
-    }
-
-    override fun navigateWithData(route: NavKey, data: String) {
-        when (route) {
-            is CommonInfo -> {
-                backstack.add(CommonInfo(data))
-            }
-            else -> {
-                navigate(route)
-            }
-        }
     }
 
     override fun popEntry() {

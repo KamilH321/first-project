@@ -7,4 +7,4 @@ import kotlinx.serialization.Serializable
 object Search: NavKey
 
 @Serializable
-data class CommonInfo(val data: String = ""): NavKey
+data class CommonInfo(val filmId: String = ""): NavKey

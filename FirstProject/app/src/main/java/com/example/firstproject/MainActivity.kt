@@ -59,7 +59,7 @@ fun AppNavGraph(
             entry<CommonInfo> { backStackEntry ->
                 val commonInfo = backStackEntry as? CommonInfo
                 DetailInfoScreen(
-                    filmId = commonInfo?.data ?:"",
+                    filmId = commonInfo?.filmId ?:"",
                     viewModel = detailInfoViewModel,
                     navigator = navigator
                 )
