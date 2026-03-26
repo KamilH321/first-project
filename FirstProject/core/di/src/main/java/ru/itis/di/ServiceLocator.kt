@@ -1,0 +1,52 @@
+package ru.itis.di
+
+import android.content.Context
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import ru.itis.api.HttpExceptionHandler
+import ru.itis.buildconfig.impl.BuildConfigProviderImpl
+import ru.itis.data.mapper.FilmModelMapper
+import ru.itis.data.repository.FilmRepositoryImpl
+import ru.itis.domain.repository.FilmRepository
+import ru.itis.impl.HttpExceptionHandlerImpl
+import ru.itis.network.OMDbApi
+import ru.itis.network.interceptor.ApiKeyInterceptor
+import java.util.concurrent.TimeUnit
+
+object ServiceLocator {
+
+    private lateinit var appContext: Context
+
+    fun init(applicationContext: Context){
+        appContext = applicationContext
+    }
+    private val buildConfigProviderImpl = BuildConfigProviderImpl()
+
+    private val apiKeyInterceptor = ApiKeyInterceptor(buildConfigProviderImpl)
+    private val okHttpClient = OkHttpClient.Builder()
+        .readTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(60, TimeUnit.SECONDS)
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .addInterceptor(apiKeyInterceptor)
+        .build()
+
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(buildConfigProviderImpl.getOMDbApiBaseUrl())
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val omdbApi = retrofit.create(OMDbApi::class.java)
+
+    fun getHttpExceptionHandler(): HttpExceptionHandler = HttpExceptionHandlerImpl(appContext)
+
+    fun getOMDbApi() = omdbApi
+
+    fun getFilmRepository(): FilmRepository {
+        return FilmRepositoryImpl(
+            omdbApi = getOMDbApi(),
+            filmModelMapper = FilmModelMapper()
+        )
+    }
+}
