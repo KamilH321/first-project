@@ -1,5 +1,6 @@
 package ru.itis.di
 
+import android.content.Context
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -15,6 +16,11 @@ import java.util.concurrent.TimeUnit
 
 object ServiceLocator {
 
+    private lateinit var appContext: Context
+
+    fun init(applicationContext: Context){
+        appContext = applicationContext
+    }
     private val buildConfigProviderImpl = BuildConfigProviderImpl()
 
     private val apiKeyInterceptor = ApiKeyInterceptor(buildConfigProviderImpl)
@@ -33,7 +39,7 @@ object ServiceLocator {
 
     private val omdbApi = retrofit.create(OMDbApi::class.java)
 
-    fun getHttpExceptionHandler(): HttpExceptionHandler = HttpExceptionHandlerImpl()
+    fun getHttpExceptionHandler(): HttpExceptionHandler = HttpExceptionHandlerImpl(appContext)
 
     fun getOMDbApi() = omdbApi
 

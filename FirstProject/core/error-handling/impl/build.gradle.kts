@@ -36,6 +36,7 @@ dependencies {
 
     implementation(project(":core:error-handling:api"))
     implementation(project(":core:domain"))
+    implementation(project(":core:utils"))
 
     // Retrofit
     implementation(libs.retrofit)

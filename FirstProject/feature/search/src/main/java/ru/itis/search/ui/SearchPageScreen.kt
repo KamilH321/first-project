@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
@@ -52,6 +51,7 @@ import ru.itis.search.R
 import ru.itis.search.viewmodel.SearchViewModel
 import ru.itis.utils.Constants
 import androidx.compose.foundation.lazy.itemsIndexed
+import ru.itis.domain.model.FilmModel
 
 @Composable
 fun SearchScreen(
@@ -78,7 +78,7 @@ fun SearchScreen(
 private fun SearchContent(
     input: String,
     onInputValueChange: (String) -> Unit,
-    filmList: List<ru.itis.domain.model.FilmModel>,
+    filmList: List<FilmModel>,
     onSearchClick: () -> Unit,
     navigator: Navigator
 ) {
@@ -190,7 +190,7 @@ private fun SearchContent(
 
 @Composable
 private fun FilmCard(
-    film: ru.itis.domain.model.FilmModel,
+    film: FilmModel,
     onCardClick: () -> Unit
 ) {
     Card(
