@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp.plugin)
 }
 
 val localProperties = Properties()
@@ -52,6 +53,10 @@ android {
 dependencies {
 
     implementation(project(":core:build-config:api"))
+
+    // Dagger
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

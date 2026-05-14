@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import ru.itis.navigation.CommonInfo
@@ -16,13 +17,15 @@ import ru.itis.detail_info.ui.DetailInfoScreen
 import ru.itis.detail_info.viewmodel.DetailInfoViewModel
 import ru.itis.search.ui.SearchScreen
 import ru.itis.search.viewmodel.SearchViewModel
+import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
 
-    private val searchViewModel: SearchViewModel by viewModels { SearchViewModel.Factory }
-    private val detailInfoViewModel: DetailInfoViewModel by viewModels { DetailInfoViewModel.Factory }
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        appComponent().inject(this)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
@@ -30,9 +33,8 @@ class MainActivity : ComponentActivity() {
 
             FirstProjectTheme {
                 AppNavGraph(
-                    searchViewModel,
-                    detailInfoViewModel,
-                    NavigatorImpl()
+                    factory = viewModelFactory,
+                    navigator = NavigatorImpl()
                 )
             }
         }
@@ -42,8 +44,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun AppNavGraph(
-    searchViewModel: SearchViewModel,
-    detailInfoViewModel: DetailInfoViewModel,
+    factory: ViewModelProvider.Factory,
     navigator: NavigatorImpl
 ) {
 
@@ -53,14 +54,14 @@ fun AppNavGraph(
         entryProvider = entryProvider {
             entry<Search> {
                 SearchScreen(
-                    searchViewModel,
+                    factory,
                     navigator)
             }
             entry<CommonInfo> { backStackEntry ->
                 val commonInfo = backStackEntry as? CommonInfo
                 DetailInfoScreen(
                     filmId = commonInfo?.filmId ?:"",
-                    viewModel = detailInfoViewModel,
+                    factory = factory,
                     navigator = navigator
                 )
             }

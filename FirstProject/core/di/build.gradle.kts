@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp.plugin)
-    alias(libs.plugins.hilt)
 }
 
 android {
@@ -42,16 +41,14 @@ dependencies {
     implementation(project(":core:build-config:api"))
     implementation(project(":core:build-config:impl"))
     implementation(project(":core:error-handling:api"))
-    implementation(project(":core:error-handling:impl"))
 
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
 
-    // Hilt
-    implementation(libs.hilt)
-    ksp(libs.hilt.compiler)  // Используем ksp для Hilt
-    implementation(libs.javax.inject)
+    // Dagger
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

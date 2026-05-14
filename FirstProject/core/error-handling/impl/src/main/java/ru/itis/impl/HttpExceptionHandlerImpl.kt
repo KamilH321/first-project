@@ -5,9 +5,11 @@ import android.widget.Toast
 import retrofit2.HttpException
 import ru.itis.api.HttpExceptionHandler
 import ru.itis.utils.Constants
+import ru.itis.utils.context.ApplicationContext
+import javax.inject.Inject
 
-class HttpExceptionHandlerImpl(
-    private val appContext: Context
+class HttpExceptionHandlerImpl @Inject constructor(
+    @ApplicationContext private val appContext: Context
 ): HttpExceptionHandler {
 
     override fun handleException(ex: Throwable) {

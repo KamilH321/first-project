@@ -49,7 +49,10 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:navigation"))
     implementation(project(":core:build-config:api"))
+    implementation(project(":core:error-handling:api"))
+    implementation(project(":core:error-handling:impl"))
     implementation(project(":core:build-config:impl"))
+    implementation(project(":core:utils"))
     implementation(project(":feature:search"))
     implementation(project(":feature:detail-info"))
 
@@ -80,6 +83,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
 
+    // Dagger
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

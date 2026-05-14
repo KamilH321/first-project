@@ -41,7 +41,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.SubcomposeAsyncImage
 import ru.itis.detail_info.R
 import ru.itis.detail_info.viewmodel.DetailInfoViewModel
@@ -52,9 +54,12 @@ import ru.itis.utils.Constants
 @Composable
 fun DetailInfoScreen(
     filmId: String,
-    viewModel: DetailInfoViewModel,
+    factory: ViewModelProvider.Factory,
     navigator: Navigator
 ) {
+
+    val viewModel: DetailInfoViewModel = viewModel(factory = factory)
+
     val filmState = viewModel.film.collectAsStateWithLifecycle()
     val film = filmState.value
 

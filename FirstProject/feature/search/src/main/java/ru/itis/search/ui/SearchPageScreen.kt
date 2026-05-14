@@ -51,13 +51,17 @@ import ru.itis.search.R
 import ru.itis.search.viewmodel.SearchViewModel
 import ru.itis.utils.Constants
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.itis.domain.model.FilmModel
 
 @Composable
 fun SearchScreen(
-    viewModel: SearchViewModel,
+    factory: ViewModelProvider.Factory,
     navigator: Navigator
 ) {
+    val viewModel: SearchViewModel = viewModel(factory = factory)
+
     var input by remember { mutableStateOf("") }
     val filmList by viewModel.filmList.collectAsStateWithLifecycle()
 

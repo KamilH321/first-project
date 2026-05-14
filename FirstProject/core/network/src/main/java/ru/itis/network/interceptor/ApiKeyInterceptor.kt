@@ -3,8 +3,11 @@ package ru.itis.network.interceptor
 import okhttp3.Interceptor
 import okhttp3.Response
 import ru.itis.buildconfig.api.BuildConfigProvider
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ApiKeyInterceptor(
+@Singleton
+class ApiKeyInterceptor @Inject constructor(
     private val buildConfigProvider: BuildConfigProvider
 ): Interceptor {
 

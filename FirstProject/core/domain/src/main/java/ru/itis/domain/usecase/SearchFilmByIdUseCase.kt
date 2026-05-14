@@ -5,8 +5,9 @@ import kotlinx.coroutines.withContext
 import ru.itis.domain.model.FilmModel
 import ru.itis.domain.model.FullInfoFilmModel
 import ru.itis.domain.repository.FilmRepository
+import javax.inject.Inject
 
-class SearchFilmByIdUseCase(private val filmRepository: FilmRepository) {
+class SearchFilmByIdUseCase @Inject constructor(private val filmRepository: FilmRepository) {
 
     suspend operator fun invoke(query: String): FullInfoFilmModel {
         return withContext(Dispatchers.IO){
