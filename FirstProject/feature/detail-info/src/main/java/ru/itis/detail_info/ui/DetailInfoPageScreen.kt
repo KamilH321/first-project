@@ -31,6 +31,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -54,18 +56,28 @@ import ru.itis.utils.Constants
 @Composable
 fun DetailInfoScreen(
     filmId: String,
-    factory: ViewModelProvider.Factory,
+    viewModelFactoryAssisted: DetailInfoViewModel.Factory,
     navigator: Navigator
 ) {
 
-    val viewModel: DetailInfoViewModel = viewModel(factory = factory)
+
+    val viewModelFactory = remember(filmId) {
+        object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return viewModelFactoryAssisted.create(filmId) as T
+            }
+        }
+    }
+
+    val viewModel: DetailInfoViewModel = viewModel(key = filmId,
+        factory = viewModelFactory
+    )
 
     val filmState = viewModel.film.collectAsStateWithLifecycle()
     val film = filmState.value
 
-    LaunchedEffect(filmId) {
-        viewModel.getFilm(filmId)
-    }
+
 
     Scaffold(
         topBar = {

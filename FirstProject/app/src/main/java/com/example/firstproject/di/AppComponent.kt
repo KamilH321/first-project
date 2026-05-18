@@ -7,6 +7,7 @@ import dagger.Component
 import ru.itis.buildconfig.impl.di.BuildConfigProviderModule
 import ru.itis.data.di.DataModule
 import ru.itis.detail_info.di.DetailInfoViewModelModule
+import ru.itis.detail_info.viewmodel.DetailInfoViewModel
 import ru.itis.di.ViewModelFactoryModule
 import ru.itis.impl.HttpExceptionHandlerModule
 import ru.itis.network.di.NetworkModule
@@ -23,7 +24,6 @@ import javax.inject.Singleton
         HttpExceptionHandlerModule::class,
         ContextModule::class,
         SearchViewModelModule::class,
-        DetailInfoViewModelModule::class,
         ViewModelFactoryModule::class
 
     ]
@@ -36,4 +36,6 @@ interface AppComponent {
         fun create(@BindsInstance application: Application): AppComponent
     }
     fun inject(activity: MainActivity)
+
+    fun detailInfoViewModelFactory(): DetailInfoViewModel.Factory
 }

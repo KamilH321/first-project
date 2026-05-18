@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
@@ -48,6 +50,9 @@ fun AppNavGraph(
     navigator: NavigatorImpl
 ) {
 
+    val context = LocalContext.current
+    val appComponent = remember { context.appComponent() }
+
     NavDisplay(
         backStack = navigator.getBackStack(),
         onBack = { navigator.popEntry() },
@@ -61,7 +66,7 @@ fun AppNavGraph(
                 val commonInfo = backStackEntry as? CommonInfo
                 DetailInfoScreen(
                     filmId = commonInfo?.filmId ?:"",
-                    factory = factory,
+                    viewModelFactoryAssisted = appComponent.detailInfoViewModelFactory(),
                     navigator = navigator
                 )
             }

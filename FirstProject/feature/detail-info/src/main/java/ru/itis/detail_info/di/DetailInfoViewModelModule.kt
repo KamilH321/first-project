@@ -10,8 +10,8 @@ import ru.itis.di.ViewModelKey
 @Module
 interface DetailInfoViewModelModule {
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(DetailInfoViewModel::class)
-    fun bindAuthViewModel(viewModel: DetailInfoViewModel): ViewModel
+//    @Binds
+//    @IntoMap
+//    @ViewModelKey(DetailInfoViewModel::class)
+//    fun bindAuthViewModel(viewModel: DetailInfoViewModel): ViewModel
 }

@@ -2,6 +2,9 @@ package ru.itis.detail_info.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -11,21 +14,31 @@ import ru.itis.domain.usecase.SearchFilmByIdUseCase
 import ru.itis.utils.runCatching
 import javax.inject.Inject
 
-class DetailInfoViewModel @Inject constructor(
+class DetailInfoViewModel @AssistedInject constructor(
     private val httpExceptionHandler: HttpExceptionHandler,
-    private val searchFilmByIdUseCase: SearchFilmByIdUseCase
+    private val searchFilmByIdUseCase: SearchFilmByIdUseCase,
+    @Assisted private val filmId: String
 ): ViewModel() {
 
     private val _film = MutableStateFlow<FullInfoFilmModel?>(null)
     val film: StateFlow<FullInfoFilmModel?> = _film
 
-    fun getFilm(query: String){
+    init {
+        getFilm()
+    }
+
+    fun getFilm(){
         viewModelScope.launch {
             runCatching(httpExceptionHandler) {
-                searchFilmByIdUseCase(query)
+                searchFilmByIdUseCase(filmId)
             }.onSuccess {
                 _film.value = it
             }
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(filmId: String): DetailInfoViewModel
     }
 }
