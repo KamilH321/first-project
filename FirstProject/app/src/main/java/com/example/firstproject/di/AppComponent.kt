@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.firstproject.MainActivity
 import dagger.BindsInstance
 import dagger.Component
+import ru.itis.analytics.impl.di.AnalyticsModule
 import ru.itis.buildconfig.impl.di.BuildConfigProviderModule
 import ru.itis.data.di.DataModule
 import ru.itis.detail_info.di.DetailInfoViewModelModule
@@ -24,8 +25,8 @@ import javax.inject.Singleton
         HttpExceptionHandlerModule::class,
         ContextModule::class,
         SearchViewModelModule::class,
-        ViewModelFactoryModule::class
-
+        ViewModelFactoryModule::class,
+        AnalyticsModule::class
     ]
 
 )

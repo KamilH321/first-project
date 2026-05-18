@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp.plugin)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.gms.google.services)
+    alias(libs.plugins.firebase.crashlytics.plugin)
 }
 
 android {
@@ -43,6 +45,8 @@ android {
 
 dependencies {
 
+    implementation(project(":core:analytics:api"))
+    implementation(project(":core:analytics:impl"))
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
     implementation(project(":core:di"))
@@ -86,6 +90,12 @@ dependencies {
     // Dagger
     implementation(libs.dagger)
     ksp(libs.dagger.compiler)
+
+    // Firebase
+    implementation(libs.firebase.cloud.messaging)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.remote.config)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

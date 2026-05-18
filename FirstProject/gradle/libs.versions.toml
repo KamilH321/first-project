@@ -38,6 +38,14 @@ coil = "2.7.0"
 appcompat = "1.7.1"
 material = "1.13.0"
 
+# Google Servis
+google-services = "4.4.4"
+cloud-messaging = "25.0.1"
+firebase-analytics = "21.6.2"
+firebase-crashlytics = "20.0.5"
+firebase-crashlytics-plugin = "3.0.7"
+firebase-remote-config = "23.0.1"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -86,6 +94,12 @@ retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
+# Google Services
+firebase-cloud-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "cloud-messaging" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
+firebase-remote-config = { module = "com.google.firebase:firebase-config", version.ref = "firebase-remote-config" }
+
 [bundles]
 nav3-core = ["x-navigation3-runtime", "x-navigation3-ui", "x-navigation3-lifecyclevm"]
 
@@ -103,6 +117,9 @@ room-plugin = { id = "androidx.room", version.ref = "room" }
 # Serialization
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+
+gms-google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
+firebase-crashlytics-plugin = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics-plugin" }
 
 
 
