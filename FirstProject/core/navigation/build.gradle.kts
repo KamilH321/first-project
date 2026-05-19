@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp.plugin)
 }
 
 android {
@@ -38,6 +39,10 @@ dependencies {
     // Navigation
     implementation(libs.compose.navigation)
     implementation(libs.bundles.nav3.core)
+
+    // Dagger
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

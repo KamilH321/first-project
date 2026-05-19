@@ -2,11 +2,11 @@ package com.example.firstproject.navigation
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.navigation3.runtime.NavKey
-import ru.itis.navigation.CommonInfo
 import ru.itis.navigation.Navigator
 import ru.itis.navigation.Search
+import javax.inject.Inject
 
-class NavigatorImpl: Navigator {
+class NavigatorImpl @Inject constructor(): Navigator {
 
     private val backstack =  mutableStateListOf<Any>()
 
@@ -22,5 +22,5 @@ class NavigatorImpl: Navigator {
         backstack.removeLastOrNull()
     }
 
-    fun getBackStack() = backstack
+    override fun getBackStack() = backstack
 }

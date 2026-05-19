@@ -1,10 +1,12 @@
 package com.example.firstproject
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -13,14 +15,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import ru.itis.navigation.CommonInfo
-import com.example.firstproject.navigation.NavigatorImpl
 import ru.itis.navigation.Search
 import com.example.firstproject.ui.theme.FirstProjectTheme
 import ru.itis.analytics.api.Analytics
 import ru.itis.detail_info.ui.DetailInfoScreen
-import ru.itis.detail_info.viewmodel.DetailInfoViewModel
+import ru.itis.navigation.Navigator
 import ru.itis.search.ui.SearchScreen
-import ru.itis.search.viewmodel.SearchViewModel
 import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
@@ -31,17 +31,34 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var analytics: Analytics
 
+    @Inject
+    lateinit var navigator: Navigator
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            println("TEST TAG - Разрешение на уведомления получено!")
+        } else {
+            println("TEST TAG - Разрешение на уведомления не было получено")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         appComponent().inject(this)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
 
         setContent {
 
             FirstProjectTheme {
                 AppNavGraph(
                     factory = viewModelFactory,
-                    navigator = NavigatorImpl(),
+                    navigator = navigator,
                     analytics = analytics
                 )
             }
@@ -53,7 +70,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNavGraph(
     factory: ViewModelProvider.Factory,
-    navigator: NavigatorImpl,
+    navigator: Navigator,
     analytics: Analytics
 ) {
 

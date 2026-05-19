@@ -14,10 +14,10 @@ class AppMessagingService: FirebaseMessagingService() {
         super.onMessageReceived(message)
 
         if (message.data.isNotEmpty()) {
-            val kind = message.data["kind"]
-            val title = message.data["title"] ?:"Стандартный заголовок"
-            val messageText = message.data["message"] ?: ""
-
+            val kind = message.data[KEY_KIND]
+            val title = message.data[KEY_TITLE] ?: DEFAULT_MESSAGE
+            val messageText = message.data[KEY_MESSAGE] ?: ""
+            sendNotification(kind, title, messageText)
         }
     }
 
@@ -28,19 +28,19 @@ class AppMessagingService: FirebaseMessagingService() {
 
         val builder = when (kind) {
             "auth" -> {
-                NotificationCompat.Builder(this, "auth_chanel")
+                NotificationCompat.Builder(this, AUTH_CHANNEL)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setCategory(Notification.CATEGORY_STATUS)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
             }
             "promo" -> {
-                NotificationCompat.Builder(this, "promo_chanel")
+                NotificationCompat.Builder(this, PROMO_CHANNEL)
                     .setSmallIcon(R.drawable.ic_launcher_background)
                     .setCategory(Notification.CATEGORY_PROMO)
                     .setStyle(NotificationCompat.BigTextStyle().bigText(messageText))
             }
             else -> {
-                NotificationCompat.Builder(this, "promo_chanel")
+                NotificationCompat.Builder(this, PROMO_CHANNEL)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
             }
         }
@@ -52,5 +52,16 @@ class AppMessagingService: FirebaseMessagingService() {
             .build()
 
         notificationManager?.notify(notificationId, notification)
+    }
+
+    private companion object {
+        private const val PROMO_CHANNEL = "promo_chanel"
+        private const val AUTH_CHANNEL = "auth_chanel"
+
+        private const val DEFAULT_MESSAGE = "Стандартный заголовок"
+
+        const val KEY_KIND = "kind"
+        const val KEY_TITLE = "title"
+        const val KEY_MESSAGE = "message"
     }
 }

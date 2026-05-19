@@ -7,4 +7,6 @@ interface Navigator {
     fun navigate(route: NavKey)
 
     fun popEntry()
+
+    fun getBackStack(): List<Any>
 }

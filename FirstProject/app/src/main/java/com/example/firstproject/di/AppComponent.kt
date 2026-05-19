@@ -2,6 +2,7 @@ package com.example.firstproject.di
 
 import android.app.Application
 import com.example.firstproject.MainActivity
+import com.example.firstproject.navigation.di.NavigationModule
 import dagger.BindsInstance
 import dagger.Component
 import ru.itis.analytics.impl.di.AnalyticsModule
@@ -26,7 +27,8 @@ import javax.inject.Singleton
         ContextModule::class,
         SearchViewModelModule::class,
         ViewModelFactoryModule::class,
-        AnalyticsModule::class
+        AnalyticsModule::class,
+        NavigationModule::class
     ]
 
 )
