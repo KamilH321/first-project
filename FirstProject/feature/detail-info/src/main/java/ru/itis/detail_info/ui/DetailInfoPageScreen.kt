@@ -30,7 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,6 +49,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.SubcomposeAsyncImage
 import ru.itis.detail_info.R
 import ru.itis.detail_info.viewmodel.DetailInfoViewModel
+import ru.itis.domain.model.FullInfoFilmModel
 import ru.itis.navigation.Navigator
 import ru.itis.utils.Constants
 
@@ -74,28 +75,35 @@ fun DetailInfoScreen(
         factory = viewModelFactory
     )
 
-    val filmState = viewModel.film.collectAsStateWithLifecycle()
-    val film = filmState.value
+    val film by viewModel.film.collectAsStateWithLifecycle()
 
+    val onBackClick = remember(navigator) {
+        { navigator.popEntry() }
+    }
 
+    when (val currentFilm = film) {
+        null -> {
+            DetailInfoLoading(onBackClick = onBackClick)
+        }
+        else -> {
+            DetailInfoContent(
+                film = currentFilm,
+                onBackClick = onBackClick
+            )
+        }
+    }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DetailInfoLoading(onBackClick: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        text = film?.title ?: stringResource(R.string.movie_details),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        fontWeight = FontWeight.Medium
-                    )
-                },
+                title = { Text(stringResource(R.string.movie_details), fontWeight = FontWeight.Medium) },
                 navigationIcon = {
-                    IconButton(onClick = { navigator.popEntry() }) {
-                        Icon(
-                            Icons.Default.ArrowBack,
-                            contentDescription = stringResource(R.string.go_back)
-                        )
+                    IconButton(onClick = onBackClick) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.go_back))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -109,238 +117,196 @@ fun DetailInfoScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(innerPadding),
+            contentAlignment = Alignment.Center
         ) {
-            if (film == null) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(48.dp),
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    stringResource(R.string.loading),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DetailInfoContent(
+    film: FullInfoFilmModel,
+    onBackClick: () -> Unit
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = film.title,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        fontWeight = FontWeight.Medium
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.go_back))
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            )
+        },
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item(key = Constants.POSTER_KEY) {
+                SubcomposeAsyncImage(
+                    model = film.poster.takeIf { it != Constants.NOT_AVAILABLE } ?: "",
+                    contentDescription = film.title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(400.dp)
+                        .clip(RoundedCornerShape(16.dp)),
+                    contentScale = ContentScale.Crop,
+                    loading = {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(modifier = Modifier.size(32.dp))
+                        }
+                    },
+                    error = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(16.dp)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(stringResource(R.string.no_poster), color = Color.Gray)
+                        }
+                    }
+                )
+            }
+
+            item(key = Constants.TITLE_RATING_KEY) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = film.title,
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                        lineHeight = 32.sp
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(48.dp),
+                        Icon(
+                            Icons.Default.Star,
+                            contentDescription = stringResource(R.string.imdb_rating),
+                            tint = Color(0xFFFFD700),
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            text = if (film.imdbRating != Constants.NOT_AVAILABLE) "${film.imdbRating} / 10" else Constants.NOT_AVAILABLE,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.primary
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            stringResource(R.string.loading),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                        )
                     }
                 }
-            } else {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(
-                        start = 16.dp,
-                        end = 16.dp,
-                        top = 16.dp,
-                        bottom = 16.dp
-                    ),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+            }
+
+            item(key = Constants.CHIPS_KEY) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    item(key = "poster") {
-                        SubcomposeAsyncImage(
-                            model = film.poster.takeIf { it != Constants.NOT_AVAILABLE } ?: "",
-                            contentDescription = film.title,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(400.dp)
-                                .clip(RoundedCornerShape(16.dp)),
-                            contentScale = ContentScale.Crop,
-                            loading = {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    CircularProgressIndicator(modifier = Modifier.size(32.dp))
-                                }
-                            },
-                            error = {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .clip(RoundedCornerShape(16.dp)),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(
-                                        stringResource(R.string.no_poster),
-                                        color = Color.Gray
-                                    )
-                                }
-                            }
+                    if (film.year != Constants.NOT_AVAILABLE) InfoChip(text = film.year)
+                    if (film.type != Constants.NOT_AVAILABLE) InfoChip(text = film.type.uppercase())
+                    if (film.runtime != Constants.NOT_AVAILABLE) InfoChip(text = film.runtime)
+                }
+            }
+
+            if (film.genre != Constants.NOT_AVAILABLE) {
+                item(key = Constants.GENRE_KEY) { InfoSection(title = stringResource(R.string.genre), content = film.genre) }
+            }
+            if (film.director != Constants.NOT_AVAILABLE) {
+                item(key = Constants.DIRECTOR_KEY) { InfoSection(title = stringResource(R.string.director), content = film.director) }
+            }
+            if (film.writer != Constants.NOT_AVAILABLE) {
+                item(key = Constants.WRITER_KEY) { InfoSection(title = stringResource(R.string.writer), content = film.writer) }
+            }
+            if (film.actors != Constants.NOT_AVAILABLE) {
+                item(key = Constants.ACTORS_KEY) { InfoSection(title = stringResource(R.string.cast), content = film.actors) }
+            }
+            if (film.plot != Constants.NOT_AVAILABLE) {
+                item(key = "plot") { InfoSection(title = stringResource(R.string.plot), content = film.plot) }
+            }
+
+            item(key = Constants.ADDITIONAL_INFO_KEY) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Text(
+                            stringResource(R.string.additional_information),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
                         )
-                    }
-
-                    item(key = "title_rating") {
-                        Column(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                text = film.title,
-                                style = MaterialTheme.typography.headlineMedium,
-                                fontWeight = FontWeight.Bold,
-                                lineHeight = 32.sp
-                            )
-
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(4.dp)
-                            ) {
-                                Icon(
-                                    Icons.Default.Star,
-                                    contentDescription = stringResource(R.string.imdb_rating),
-                                    tint = Color(0xFFFFD700),
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Text(
-                                    text = if (film.imdbRating != Constants.NOT_AVAILABLE)
-                                        "${film.imdbRating} / 10"
-                                    else
-                                        Constants.NOT_AVAILABLE,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Medium,
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                            }
+                        if (film.released != Constants.NOT_AVAILABLE) {
+                            AdditionalInfoRow(label = stringResource(R.string.released), value = film.released)
                         }
-                    }
-
-                    item(key = "chips") {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            if (film.year != Constants.NOT_AVAILABLE) {
-                                InfoChip(text = film.year)
-                            }
-                            if (film.type != Constants.NOT_AVAILABLE) {
-                                InfoChip(text = film.type.uppercase())
-                            }
-                            if (film.runtime != Constants.NOT_AVAILABLE) {
-                                InfoChip(text = film.runtime)
-                            }
+                        if (film.language != Constants.NOT_AVAILABLE) {
+                            AdditionalInfoRow(label = stringResource(R.string.language), value = film.language)
                         }
-                    }
-
-                    if (film.genre != Constants.NOT_AVAILABLE) {
-                        item(key = "genre") {
-                            InfoSection(
-                                title = stringResource(R.string.genre),
-                                content = film.genre
-                            )
+                        if (film.country != Constants.NOT_AVAILABLE) {
+                            AdditionalInfoRow(label = stringResource(R.string.country), value = film.country)
                         }
-                    }
-
-                    if (film.director != Constants.NOT_AVAILABLE) {
-                        item(key = "director") {
-                            InfoSection(
-                                title = stringResource(R.string.director),
-                                content = film.director
-                            )
-                        }
-                    }
-
-                    if (film.writer != Constants.NOT_AVAILABLE) {
-                        item(key = "writer") {
-                            InfoSection(
-                                title = stringResource(R.string.writer),
-                                content = film.writer
-                            )
-                        }
-                    }
-
-                    if (film.actors != Constants.NOT_AVAILABLE) {
-                        item(key = "actors") {
-                            InfoSection(
-                                title = stringResource(R.string.cast),
-                                content = film.actors
-                            )
-                        }
-                    }
-
-                    if (film.plot != Constants.NOT_AVAILABLE) {
-                        item(key = "plot") {
-                            InfoSection(
-                                title = stringResource(R.string.plot),
-                                content = film.plot
-                            )
-                        }
-                    }
-
-                    item(key = "additional_info") {
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(12.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceVariant
-                            )
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                verticalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                Text(
-                                    stringResource(R.string.additional_information),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold
-                                )
-
-                                if (film.released != Constants.NOT_AVAILABLE) {
-                                    AdditionalInfoRow(
-                                        label = stringResource(R.string.released),
-                                        value = film.released
-                                    )
-                                }
-
-                                if (film.language != Constants.NOT_AVAILABLE) {
-                                    AdditionalInfoRow(
-                                        label = stringResource(R.string.language),
-                                        value = film.language
-                                    )
-                                }
-
-                                if (film.country != Constants.NOT_AVAILABLE) {
-                                    AdditionalInfoRow(
-                                        label = stringResource(R.string.country),
-                                        value = film.country
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    item(key = "back_button") {
-                        Button(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(56.dp),
-                            onClick = { navigator.popEntry() },
-                            shape = RoundedCornerShape(12.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary
-                            )
-                        ) {
-                            Text(
-                                stringResource(R.string.back_to_search),
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Medium
-                            )
-                        }
-                    }
-
-                    item(key = "spacer") {
-                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
+            }
+
+            item(key = Constants.BACK_BUTTON_KEY) {
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    onClick = onBackClick,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Text(stringResource(R.string.back_to_search), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                }
+            }
+
+            item(key = "spacer") {
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }

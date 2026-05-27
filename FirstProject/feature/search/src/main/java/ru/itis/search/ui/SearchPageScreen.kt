@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
@@ -50,7 +51,6 @@ import ru.itis.navigation.Navigator
 import ru.itis.search.R
 import ru.itis.search.viewmodel.SearchViewModel
 import ru.itis.utils.Constants
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.itis.domain.model.FilmModel
@@ -65,109 +65,48 @@ fun SearchScreen(
     var input by remember { mutableStateOf("") }
     val filmList by viewModel.filmList.collectAsStateWithLifecycle()
 
+    val onFilmClick = remember(navigator) {
+        { filmId: String -> navigator.navigate(CommonInfo(filmId)) }
+    }
+
+    val onSearchClick = remember(viewModel) {
+        { query: String -> if (query.isNotBlank()) viewModel.getFilmList(query) }
+    }
+
     SearchContent(
-        input = input,
+        inputProvider = { input },
         onInputValueChange = { input = it },
         filmList = filmList,
-        onSearchClick = {
-            if (input.isNotBlank()) {
-                viewModel.getFilmList(input)
-            }
-        },
-        navigator = navigator
+        onSearchClick = onSearchClick,
+        onFilmClick = onFilmClick
     )
 }
 
 @Composable
 private fun SearchContent(
-    input: String,
+    inputProvider: () -> String,
     onInputValueChange: (String) -> Unit,
     filmList: List<FilmModel>,
-    onSearchClick: () -> Unit,
-    navigator: Navigator
+    onSearchClick: (String) -> Unit,
+    onFilmClick: (String) -> Unit
 ) {
     Scaffold(
         topBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                TextField(
-                    value = input,
-                    onValueChange = onInputValueChange,
-                    modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text(stringResource(R.string.search_hint)) },
-                    leadingIcon = {
-                        Icon(
-                            Icons.Default.Search,
-                            contentDescription = stringResource(R.string.search_hint)
-                        )
-                    },
-                    shape = RoundedCornerShape(12.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    singleLine = true
-                )
-            }
+            SearchTopBar(
+                inputProvider = inputProvider,
+                onInputValueChange = onInputValueChange
+            )
         },
         bottomBar = {
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .height(56.dp),
-                onClick = onSearchClick,
-                enabled = input.isNotBlank(),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-            ) {
-                Text(
-                    stringResource(R.string.search_button),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            }
+            SearchBottomButton(
+                inputProvider = inputProvider,
+                onSearchClick = onSearchClick
+            )
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         if (filmList.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        Icons.Default.Search,
-                        contentDescription = null,
-                        modifier = Modifier.size(64.dp),
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        stringResource(R.string.empty_state_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        stringResource(R.string.empty_state_message),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                    )
-                }
-            }
+            SearchEmptyState(modifier = Modifier.padding(innerPadding))
         } else {
             LazyColumn(
                 modifier = Modifier
@@ -176,15 +115,13 @@ private fun SearchContent(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                itemsIndexed(
+                items(
                     items = filmList,
-                    key = { index, item -> "${item.id}_$index" }
-                ) { index, film ->
+                    key = { item -> item.id}
+                ) { film ->
                     FilmCard(
                         film = film,
-                        onCardClick = {
-                            navigator.navigate(CommonInfo(film.id))
-                        }
+                        onCardClick = onFilmClick
                     )
                 }
             }
@@ -193,9 +130,99 @@ private fun SearchContent(
 }
 
 @Composable
+private fun SearchTopBar(
+    inputProvider: () -> String,
+    onInputValueChange: (String) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        TextField(
+            value = inputProvider(),
+            onValueChange = onInputValueChange,
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = { Text(stringResource(R.string.search_hint)) },
+            leadingIcon = {
+                Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search_hint))
+            },
+            shape = RoundedCornerShape(12.dp),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            singleLine = true
+        )
+    }
+}
+
+@Composable
+private fun SearchBottomButton(
+    inputProvider: () -> String,
+    onSearchClick: (String) -> Unit
+) {
+    val input = inputProvider()
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .height(56.dp),
+        onClick = { onSearchClick(input) },
+        enabled = input.isNotBlank(),
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary
+        )
+    ) {
+        Text(
+            stringResource(R.string.search_button),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium
+        )
+    }
+}
+
+@Composable
+private fun SearchEmptyState(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                Icons.Default.Search,
+                contentDescription = null,
+                modifier = Modifier.size(64.dp),
+                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                stringResource(R.string.empty_state_title),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                stringResource(R.string.empty_state_message),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            )
+        }
+    }
+}
+
+@Composable
 private fun FilmCard(
     film: FilmModel,
-    onCardClick: () -> Unit
+    onCardClick: (String) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -203,7 +230,7 @@ private fun FilmCard(
             .height(140.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        onClick = onCardClick,
+        onClick = { onCardClick(film.id) },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )

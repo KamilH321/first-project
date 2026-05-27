@@ -7,6 +7,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.itis.api.HttpExceptionHandler
 import ru.itis.domain.model.FullInfoFilmModel
@@ -21,7 +22,7 @@ class DetailInfoViewModel @AssistedInject constructor(
 ): ViewModel() {
 
     private val _film = MutableStateFlow<FullInfoFilmModel?>(null)
-    val film: StateFlow<FullInfoFilmModel?> = _film
+    val film: StateFlow<FullInfoFilmModel?> = _film.asStateFlow()
 
     init {
         getFilm()
