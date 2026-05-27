@@ -4,9 +4,10 @@ import ru.itis.domain.model.FilmModel
 import ru.itis.domain.model.FullInfoFilmModel
 import ru.itis.network.pojo.OMDbFullResponseById
 import ru.itis.network.pojo.OMDbResponse
+import javax.inject.Inject
 import kotlin.String
 
-class FilmModelMapper {
+class FilmModelMapper @Inject constructor() {
 
     fun map(input: OMDbResponse): List<FilmModel> {
         val filmList = input.search

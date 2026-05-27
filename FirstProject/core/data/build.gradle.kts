@@ -51,6 +51,10 @@ dependencies {
     implementation(libs.room)
     ksp(libs.room.compiler)
 
+    // Dagger
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,13 +1,13 @@
 package ru.itis.data.repository
 
-import ru.itis.buildconfig.api.BuildConfigProvider
 import ru.itis.data.mapper.FilmModelMapper
 import ru.itis.domain.model.FilmModel
 import ru.itis.domain.model.FullInfoFilmModel
 import ru.itis.domain.repository.FilmRepository
 import ru.itis.network.OMDbApi
+import javax.inject.Inject
 
-class FilmRepositoryImpl(
+class FilmRepositoryImpl @Inject constructor(
     private val omdbApi: OMDbApi,
     private val filmModelMapper: FilmModelMapper
 ): FilmRepository {

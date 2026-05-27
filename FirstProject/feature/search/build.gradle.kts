@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp.plugin)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -46,6 +47,10 @@ dependencies {
 
     // Navigation
     implementation(libs.bundles.nav3.core)
+
+    // Dagger
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
 
     // Compose
     implementation(libs.androidx.lifecycle.runtime.ktx)

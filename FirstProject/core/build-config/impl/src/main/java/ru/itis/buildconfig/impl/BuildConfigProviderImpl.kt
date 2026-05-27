@@ -1,8 +1,9 @@
 package ru.itis.buildconfig.impl
 
 import ru.itis.buildconfig.api.BuildConfigProvider
+import javax.inject.Inject
 
-class BuildConfigProviderImpl: BuildConfigProvider {
+class BuildConfigProviderImpl @Inject constructor() : BuildConfigProvider {
 
     override fun getOMDbApiBaseUrl(): String = BuildConfig.OMDB_API_BASE_URL
 
