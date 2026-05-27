@@ -1,11 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp.plugin)
 }
 
 android {
-    namespace = "ru.itis.domain"
+    namespace = "ru.itis.test"
     compileSdk = 36
 
     defaultConfig {
@@ -34,23 +33,9 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":core:network"))
-    testImplementation(project(":core:test"))
-
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-
-    // Dagger
-    implementation(libs.dagger)
-    ksp(libs.dagger.compiler)
-
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+
+    api(libs.junit)
+    api(libs.mockk)
+    api(libs.kotlinx.coroutines.test)
 }
