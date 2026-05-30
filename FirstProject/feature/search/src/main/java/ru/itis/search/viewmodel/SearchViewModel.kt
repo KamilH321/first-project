@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import okhttp3.internal.toImmutableList
 import ru.itis.api.HttpExceptionHandler
 import ru.itis.domain.model.FilmModel
 import ru.itis.domain.usecase.SearchFilmByQueryUseCase
@@ -25,7 +26,7 @@ class SearchViewModel @Inject constructor(
             runCatching(httpExceptionHandler) {
                 searchFilmByQueryUseCase(query)
             }.onSuccess {
-                _filmList.value = it
+                _filmList.value = it.toImmutableList()
             }
         }
     }

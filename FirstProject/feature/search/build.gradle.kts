@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:navigation"))
     implementation(project(":core:error-handling:api"))
+    testImplementation(project(":core:test"))
 
     // Navigation
     implementation(libs.bundles.nav3.core)
